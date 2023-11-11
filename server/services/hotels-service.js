@@ -1,11 +1,11 @@
-const { client } = require('./mongo');
+const { client } = require('../mongo');
 const data = client.database('hotelsdb').container('hotels');
 
 async function get(req, res) {
     const { id } = req.params;
 
     const querySpec = {
-        query: 'SELECT * FROM root r WHERE r.hotelId = ' + id,
+        query: `SELECT * FROM root r WHERE r.id = ${id} `,
     };
 
     const { resources: results } = id
