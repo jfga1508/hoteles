@@ -2,13 +2,19 @@ const { client } = require('../mongo');
 const data = client.database('hotelsdb').container('hotels');
 
 async function get(req, res) {
-    const { id } = req.params;
+    const { id, city } = req.params;
 
-    const querySpec = {
-        query: `SELECT * FROM root r WHERE r.id = ${id} `,
-    };
+    const querySpec = {};
 
-    const { resources: results } = id
+    if (id) {
+        querySpec.query = `SELECT VALUE r FROM root r WHERE r.id = '${id}'`;
+    }
+
+    if (city) {
+        querySpec.query = `SELECT VALUE r FROM root r WHERE CONTAINS(r.city, '${city.toLowerCase()}')`;
+    }
+
+    const { resources: results } = querySpec.query
         ? await data.items.query(querySpec).fetchAll()
         : await data.items.readAll().fetchAll();
 

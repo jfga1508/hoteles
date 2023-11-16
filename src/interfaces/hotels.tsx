@@ -8,15 +8,17 @@ export interface Hotel {
 }
 
 export interface Room {
+    isValid?: boolean;
     roomId: number;
     name: string;
     price: number;
     tax: number;
-    type: Type;
+    type: string;
+    reservations: Reservations[];
 }
 
-enum Type {
-    Lux,
-    Single,
-    Double,
+export interface Reservations {
+    reservationId: string;
+    checkin: string;
+    checkout: string;
 }

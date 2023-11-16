@@ -4,8 +4,8 @@ export interface Reservation {
     country: string;
     city: string;
     room: Room;
-    'check-in': string;
-    'check-out': string;
+    checkin: string;
+    checkout: string;
     emergency_contact: EmergencyContact;
     user: User;
 }
@@ -15,22 +15,22 @@ export interface Room {
     name: string;
     price: number;
     tax: number;
-    type: Type;
+    type: string;
 }
 
 export interface EmergencyContact {
-    name: string;
-    tel: string;
+    name: unknown;
+    tel: unknown;
 }
 
 export interface User {
-    name: string;
-    birth_date: string;
-    gender: Gender;
-    id_type: IDType;
-    id: number;
-    email: string;
-    tel: string;
+    name: unknown;
+    birth_date: unknown;
+    gender: unknown;
+    id_type: unknown;
+    id: unknown;
+    email: unknown;
+    tel: unknown;
 }
 
 enum Gender {
@@ -39,13 +39,7 @@ enum Gender {
 }
 
 enum IDType {
-    'C.C.',
+    CC,
     Pasaporte,
     Identidad,
-}
-
-enum Type {
-    Lux,
-    Single,
-    Double,
 }
