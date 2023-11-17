@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getHotels } from '../data/hotels';
 import { Hotel } from '../interfaces/hotels';
+import Header from '../layouts/Header.tsx';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Login from './Login';
@@ -77,34 +78,37 @@ const Adminpage = () => {
 
     return (
         <>
-            <h2>Hotels</h2>
+            <Header />
+            <main>
+                <h2>Hotels</h2>
 
-            <Link className='mb-3 btn btn-primary' to='/admin/add/hotel'>
-                Add a hotel
-            </Link>
+                <Link className='mb-3 btn btn-primary' to='/admin/add/hotel'>
+                    Add a hotel
+                </Link>
 
-            <form className='search justify-content-center flex-wrap'>
-                <div className='search_group'>
-                    <label htmlFor='city'>City</label>
-                    <input
-                        type='text'
-                        id='city'
-                        name='city'
-                        placeholder='City'
-                        onChange={(e) =>
-                            setsearch({ ...search, city: e.target.value })
-                        }
-                    />
-                </div>
-                <div className='search_group justify-content-end'>
-                    <Button variant='primary' onClick={() => handleClick()}>
-                        Search
-                    </Button>
-                </div>
-            </form>
-            <hr />
+                <form className='search justify-content-center flex-wrap'>
+                    <div className='search_group'>
+                        <label htmlFor='city'>City</label>
+                        <input
+                            type='text'
+                            id='city'
+                            name='city'
+                            placeholder='City'
+                            onChange={(e) =>
+                                setsearch({ ...search, city: e.target.value })
+                            }
+                        />
+                    </div>
+                    <div className='search_group justify-content-end'>
+                        <Button variant='primary' onClick={() => handleClick()}>
+                            Search
+                        </Button>
+                    </div>
+                </form>
+                <hr />
 
-            <div>{listHotels()}</div>
+                <div>{listHotels()}</div>
+            </main>
         </>
     );
 };

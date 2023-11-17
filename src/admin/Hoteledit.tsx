@@ -1,6 +1,7 @@
 import { useState, useEffect, FormEvent, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getHotels, updateHotel } from '../data/hotels';
+import Header from '../layouts/Header.tsx';
 import uuid from 'react-uuid';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -203,89 +204,102 @@ const Hoteledit = () => {
             );
         }
 
-        return <div className='d-flex gap-3 flex-wrap mb-4'>{rooms}</div>;
+        return (
+            <div className='d-flex gap-3 flex-wrap justify-content-center mb-4'>
+                {rooms}
+            </div>
+        );
     };
 
     return (
         <>
-            <h2>Add hotel</h2>
+            <Header />
+            <main>
+                <h2>Add hotel</h2>
 
-            <form onSubmit={(e) => handleSubmit(e)}>
-                <div className='d-flex justify-content-center flex-wrap gap-3'>
-                    <div className='search_group'>
-                        <label htmlFor='name'>Hotel name</label>
-                        <input
-                            type='text'
-                            id='name'
-                            name='name'
-                            placeholder='Hotel name'
-                            value={hotels?.name || ''}
-                            onChange={(e) =>
-                                sethotels({ ...hotels, name: e.target.value })
-                            }
-                            required
-                        />
+                <form onSubmit={(e) => handleSubmit(e)}>
+                    <div className='d-flex justify-content-center flex-wrap gap-3'>
+                        <div className='search_group'>
+                            <label htmlFor='name'>Hotel name</label>
+                            <input
+                                type='text'
+                                id='name'
+                                name='name'
+                                placeholder='Hotel name'
+                                value={hotels?.name || ''}
+                                onChange={(e) =>
+                                    sethotels({
+                                        ...hotels,
+                                        name: e.target.value,
+                                    })
+                                }
+                                required
+                            />
+                        </div>
+                        <div className='search_group'>
+                            <label htmlFor='country'>Country</label>
+                            <input
+                                type='text'
+                                id='country'
+                                name='country'
+                                placeholder='Country'
+                                value={hotels?.country || ''}
+                                onChange={(e) =>
+                                    sethotels({
+                                        ...hotels,
+                                        country: e.target.value,
+                                    })
+                                }
+                                required
+                            />
+                        </div>
+                        <div className='search_group'>
+                            <label htmlFor='city'>City</label>
+                            <input
+                                type='text'
+                                id='city'
+                                name='city'
+                                placeholder='City'
+                                value={hotels?.city || ''}
+                                ref={city}
+                                onChange={(e) =>
+                                    sethotels({
+                                        ...hotels,
+                                        city: e.target.value,
+                                    })
+                                }
+                                required
+                            />
+                        </div>
                     </div>
-                    <div className='search_group'>
-                        <label htmlFor='country'>Country</label>
-                        <input
-                            type='text'
-                            id='country'
-                            name='country'
-                            placeholder='Country'
-                            value={hotels?.country || ''}
-                            onChange={(e) =>
-                                sethotels({
-                                    ...hotels,
-                                    country: e.target.value,
-                                })
-                            }
-                            required
-                        />
-                    </div>
-                    <div className='search_group'>
-                        <label htmlFor='city'>City</label>
-                        <input
-                            type='text'
-                            id='city'
-                            name='city'
-                            placeholder='City'
-                            value={hotels?.city || ''}
-                            ref={city}
-                            onChange={(e) =>
-                                sethotels({ ...hotels, city: e.target.value })
-                            }
-                            required
-                        />
-                    </div>
-                </div>
 
-                <h3>Rooms</h3>
+                    <h3>Rooms</h3>
 
-                <Button
-                    variant='primary mb-4'
-                    onClick={() => setamountRooms(amountRooms + 1)}
-                >
-                    Add a room
-                </Button>
-
-                {renderRooms()}
-
-                <div className='d-flex justify-content-center'>
-                    <Button type='submit' variant='primary'>
-                        Save hotel
+                    <Button
+                        variant='primary mb-4'
+                        onClick={() => setamountRooms(amountRooms + 1)}
+                    >
+                        Add a room
                     </Button>
-                </div>
-            </form>
 
-            <Modal show={message} onHide={handleCloseMessage}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Success!</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>The hotel is now saved.</p>
-                </Modal.Body>
-            </Modal>
+                    {renderRooms()}
+
+                    <div className='d-flex justify-content-center'>
+                        <Button type='submit' variant='primary'>
+                            Save hotel
+                        </Button>
+                    </div>
+                </form>
+
+                <Modal show={message} onHide={handleCloseMessage}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Success!</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>The hotel is now saved.</p>
+                    </Modal.Body>
+                </Modal>
+            </main>
         </>
     );
 };
