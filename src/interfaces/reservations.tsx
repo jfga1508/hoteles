@@ -1,4 +1,5 @@
 export interface Reservation {
+    id?: string | null;
     hotelId: string;
     name: string;
     country: string;
@@ -31,15 +32,4 @@ export interface User {
     id: unknown;
     email: unknown;
     tel: unknown;
-}
-
-enum Gender {
-    M,
-    F,
-}
-
-enum IDType {
-    CC,
-    Pasaporte,
-    Identidad,
 }

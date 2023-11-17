@@ -26,7 +26,7 @@ router.delete('/hotel/:id', (req, res) => {
 });
 
 // Reservations
-router.get(['/reservations', '/reservations/:from/:to'], (req, res) => {
+router.get(['/reservations', '/reservations/:hotelId'], (req, res) => {
     reservationsService.get(req, res);
 });
 

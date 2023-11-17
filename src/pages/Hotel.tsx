@@ -1,4 +1,3 @@
-import './Hotel.scss';
 import { useState, useEffect, FormEvent } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { getHotels } from '../data/hotels';
@@ -105,12 +104,13 @@ const Hotelpage = () => {
                     />
                 </div>
                 <div className='search_group'>
-                    <label htmlFor='from'>Check-out</label>
+                    <label htmlFor='to'>Check-out</label>
                     <input
                         type='date'
                         min={search.from}
                         max='2030-12-31'
                         name='to'
+                        id='to'
                         value={search.to}
                         onChange={(e) =>
                             setsearch({ ...search, to: e.target.value })
@@ -118,10 +118,11 @@ const Hotelpage = () => {
                     />
                 </div>
                 <div className='search_group'>
-                    <label htmlFor='from'>Persons</label>
+                    <label htmlFor='persons'>Persons</label>
                     <input
                         type='number'
                         name='persons'
+                        id='persons'
                         value={search.persons}
                         onChange={(e) =>
                             setsearch({

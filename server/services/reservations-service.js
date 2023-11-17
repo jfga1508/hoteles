@@ -4,17 +4,20 @@ const data = client.database('hotelsdb').container('reservations');
 const hotels = client.database('hotelsdb').container('hotels');
 
 async function get(req, res) {
-    const { id, from, to } = req.params;
+    const { id, hotelId } = req.params;
 
     const querySpec = {};
 
     if (id) {
         querySpec.query = `SELECT * FROM root r WHERE r.id = '${id}'`;
     }
-
-    if (from && to) {
-        querySpec.query = `SELECT * FROM root r JOIN rooms in r.rooms JOIN reservations in rooms.reservations WHERE reservations.checkin >= '${from}' AND reservations.checkout <= '${to}'`;
+    if (hotelId) {
+        querySpec.query = `SELECT * FROM root r WHERE r.hotelId = '${hotelId}'`;
     }
+
+    /*if (from && to) {
+        querySpec.query = `SELECT * FROM root r JOIN rooms in r.rooms JOIN reservations in rooms.reservations WHERE reservations.checkin >= '${from}' AND reservations.checkout <= '${to}'`;
+    }*/
 
     const { resources: results } = querySpec.query
         ? await data.items.query(querySpec).fetchAll()

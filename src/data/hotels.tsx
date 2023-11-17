@@ -14,7 +14,35 @@ export const getHotels = async ({
 }) => {
     const data = await fetch(api + (id ? `/hotel/${id}` : `/hotels/${city}`))
         .then((data) => data.json())
-        .then((data) => from && to && validateHotelRooms({ data, from, to }));
+        .then((data) => {
+            if (from && to) return validateHotelRooms({ data, from, to });
+            else return data;
+        });
+
+    return data;
+};
+
+export const createHotel = async (hotel: object) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    const data = await fetch(`${api}/hotel`, {
+        method: 'PUT',
+        headers: myHeaders,
+        body: JSON.stringify(hotel),
+    }).then((data) => data.json());
+
+    return data;
+};
+export const updateHotel = async (hotel: object) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    const data = await fetch(`${api}/hotel`, {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(hotel),
+    }).then((data) => data.json());
 
     return data;
 };

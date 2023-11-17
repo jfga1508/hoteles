@@ -54,12 +54,13 @@ function App() {
                         />
                     </div>
                     <div className='search_group'>
-                        <label htmlFor='from'>Check-out</label>
+                        <label htmlFor='to'>Check-out</label>
                         <input
                             type='date'
                             min={search.from}
                             max='2030-12-31'
                             name='to'
+                            id='to'
                             value={search.to}
                             onChange={(e) =>
                                 setsearch({ ...search, to: e.target.value })
@@ -67,10 +68,11 @@ function App() {
                         />
                     </div>
                     <div className='search_group'>
-                        <label htmlFor='from'>City</label>
+                        <label htmlFor='city'>City</label>
                         <input
                             type='text'
                             name='city'
+                            id='city'
                             placeholder='City'
                             onChange={(e) =>
                                 setsearch({ ...search, city: e.target.value })
@@ -78,10 +80,11 @@ function App() {
                         />
                     </div>
                     <div className='search_group'>
-                        <label htmlFor='from'>Persons</label>
+                        <label htmlFor='persons'>Persons</label>
                         <input
                             type='number'
                             name='persons'
+                            id='persons'
                             value={search.persons}
                             onChange={(e) =>
                                 setsearch({

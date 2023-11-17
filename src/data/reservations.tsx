@@ -1,10 +1,21 @@
 import { Reservation } from '../interfaces/reservations';
 const api = import.meta.env.VITE_API_URL + '/api';
 
-export const getReservations = async ({ id }: { id?: string }) => {
-    const data = await fetch(
-        api + (id ? `reservation/${id}` : `reservations/`)
-    ).then((data) => data.json());
+export const getReservations = async ({
+    id,
+    hotelId,
+}: {
+    id?: string;
+    hotelId?: string;
+}) => {
+    let path = `/reservations/`;
+    if (id) {
+        path = `/reservation/${id}`;
+    }
+    if (hotelId) {
+        path = `/reservations/${hotelId}`;
+    }
+    const data = await fetch(api + path).then((data) => data.json());
 
     return data;
 };

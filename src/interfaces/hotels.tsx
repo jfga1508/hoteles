@@ -1,5 +1,5 @@
 export interface Hotel {
-    id: string;
+    id: string | FormDataEntryValue;
     hotelId: number;
     name: string;
     country: string;
