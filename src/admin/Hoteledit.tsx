@@ -4,8 +4,11 @@ import { getHotels, updateHotel } from '../data/hotels';
 import uuid from 'react-uuid';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Login from './Login';
+import useToken from '../data/users';
 
 const Hoteledit = () => {
+    const { token, setToken } = useToken();
     const { hotelId } = useParams();
     const [hotels, sethotels] = useState<any>();
     const [amountRooms, setamountRooms] = useState(1);
@@ -16,13 +19,20 @@ const Hoteledit = () => {
     const handleShowMessage = () => setMessage(true);
 
     useEffect(() => {
+        if (!token) {
+            return;
+        }
         getHotels({ id: hotelId }).then((data) => {
             if (data[0]) {
                 sethotels(data[0]);
                 setamountRooms(data[0].rooms.length);
             }
         });
-    }, [hotelId]);
+    }, [hotelId, token]);
+
+    if (!token) {
+        return <Login setToken={setToken} />;
+    }
 
     const deleteRoom = (index: number) => {
         const hotel = hotels;
@@ -201,7 +211,7 @@ const Hoteledit = () => {
             <h2>Add hotel</h2>
 
             <form onSubmit={(e) => handleSubmit(e)}>
-                <div className='d-flex justify-content-center gap-3'>
+                <div className='d-flex justify-content-center flex-wrap gap-3'>
                     <div className='search_group'>
                         <label htmlFor='name'>Hotel name</label>
                         <input

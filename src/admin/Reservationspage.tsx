@@ -5,8 +5,11 @@ import { Reservation } from '../interfaces/reservations';
 import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Login from './Login';
+import useToken from '../data/users';
 
 const Reservationspage = () => {
+    const { token, setToken } = useToken();
     const { hotelId } = useParams();
     const [reservations, setreservations] = useState<Reservation[]>([]);
     const [selectedReservation, setselectedReservation] = useState<{
@@ -17,10 +20,17 @@ const Reservationspage = () => {
     const handleShowMessage = () => setMessage(true);
 
     useEffect(() => {
+        if (!token) {
+            return;
+        }
         getReservations({ hotelId }).then(
             (data) => data && setreservations(data)
         );
-    }, [hotelId]);
+    }, [hotelId, token]);
+
+    if (!token) {
+        return <Login setToken={setToken} />;
+    }
 
     const handleClick = (data: Reservation) => {
         handleShowMessage();

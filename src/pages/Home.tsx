@@ -1,11 +1,10 @@
-import './App.scss';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getHotels } from './data/hotels';
-import { Hotel } from './interfaces/hotels';
+import { getHotels } from '../data/hotels';
+import { Hotel } from '../interfaces/hotels';
 import Button from 'react-bootstrap/Button';
 
-function App() {
+function Home() {
     const [hotels, sethotels] = useState<Hotel[]>([]);
     const [search, setsearch] = useState({
         city: '',
@@ -20,11 +19,13 @@ function App() {
     const yyyy = today.getFullYear();
 
     useEffect(() => {
-        setsearch({
+        const params = {
             ...search,
             from: `${yyyy}-${mm}-${dd}`,
             to: `${yyyy}-${mm}-${dd + 1}`,
-        });
+        };
+        setsearch(params);
+        getHotels(params).then((data) => data && sethotels(data));
     }, []);
 
     const handleClick = () => {
@@ -36,9 +37,9 @@ function App() {
 
         return (
             <div>
-                <h2>Hotels</h2>
+                <h1>Hotels</h1>
 
-                <form className='search justify-content-center'>
+                <form className='search justify-content-center flex-wrap'>
                     <div className='search_group'>
                         <label htmlFor='from'>Check-in</label>
                         <input
@@ -101,12 +102,12 @@ function App() {
                     </div>
                 </form>
                 <hr />
-                <div className='hotels'>
+                <div className='hotels flex-wrap'>
                     {data &&
                         data.map((hotel, index) => (
-                            <div key={index}>
+                            <div className='border p-2' key={index}>
                                 <h3>{hotel.name}</h3>
-                                <h6>
+                                <h6 className='text-capitalize'>
                                     {hotel.country}, {hotel.city}
                                 </h6>
                                 <p>Starting from ${hotel.rooms[0].price}</p>
@@ -131,4 +132,4 @@ function App() {
     );
 }
 
-export default App;
+export default Home;

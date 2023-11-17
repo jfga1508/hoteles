@@ -4,16 +4,27 @@ import { getHotels } from '../data/hotels';
 import { Hotel } from '../interfaces/hotels';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
+import Login from './Login';
+import useToken from '../data/users';
 
 const Adminpage = () => {
+    const { token, setToken } = useToken();
+
     const [hotels, sethotels] = useState<Hotel[]>([]);
     const [search, setsearch] = useState({
         city: '',
     });
 
     useEffect(() => {
+        if (!token) {
+            return;
+        }
         getHotels(search).then((data) => sethotels(data));
-    }, []);
+    }, [token]);
+
+    if (!token) {
+        return <Login setToken={setToken} />;
+    }
 
     const handleClick = () => {
         getHotels(search).then((data) => sethotels(data));
@@ -68,11 +79,11 @@ const Adminpage = () => {
         <>
             <h2>Hotels</h2>
 
-            <Link className='mb-3 btn btn-primary' to='/admin/hotel/new'>
+            <Link className='mb-3 btn btn-primary' to='/admin/add/hotel'>
                 Add a hotel
             </Link>
 
-            <form className='search justify-content-center'>
+            <form className='search justify-content-center flex-wrap'>
                 <div className='search_group'>
                     <label htmlFor='city'>City</label>
                     <input

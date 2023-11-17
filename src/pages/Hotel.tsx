@@ -88,7 +88,7 @@ const Hotelpage = () => {
         <>
             <h1>{hotel?.name}</h1>
 
-            <form className='search justify-content-center'>
+            <form className='search justify-content-center flex-wrap'>
                 <div className='search_group'>
                     <label htmlFor='from'>Check-in</label>
                     <input
@@ -138,10 +138,10 @@ const Hotelpage = () => {
             <h2>Rooms</h2>
 
             <hr />
-            <div className='d-flex justify-content-between gap-4'>
+            <div className='d-flex flex-wrap gap-4'>
                 {hotel &&
                     hotel.rooms.map((room, index) => (
-                        <div className='' key={index}>
+                        <div className='border p-2' key={index}>
                             <h3>{room.name}</h3>
                             <h4>{room.type}</h4>
                             <p>
