@@ -6,6 +6,7 @@ import Header from '../layouts/Header.tsx';
 export default function Login({ setToken }: { setToken: any }) {
     const [email, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const [message, setmessage] = useState('');
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -14,14 +15,15 @@ export default function Login({ setToken }: { setToken: any }) {
             password,
         });
 
-        if (results) setToken(results);
+        if (results.token) setToken(results);
+        if (results.error) setmessage(results.error);
     };
     return (
         <>
             <Header />
             <main>
                 <div className='login-wrapper'>
-                    <h1>Please Log In</h1>
+                    <h1 className='mb-4'>Please Log In</h1>
                     <form onSubmit={handleSubmit}>
                         <label>
                             <p>Email</p>
@@ -38,6 +40,12 @@ export default function Login({ setToken }: { setToken: any }) {
                             />
                         </label>
                         <div>
+                            {message && (
+                                <p className='border bg-danger text-white d-inline-block p-1 mt-3'>
+                                    {message}
+                                </p>
+                            )}
+                            <br />
                             <button
                                 className='btn btn-primary mt-3'
                                 type='submit'
