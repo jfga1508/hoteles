@@ -12,7 +12,7 @@ export interface Reservation {
 }
 
 export interface Room {
-    roomId: number;
+    roomId: string;
     name: string;
     price: number;
     tax: number;

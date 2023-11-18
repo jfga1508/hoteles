@@ -34,12 +34,26 @@ export const createHotel = async (hotel: object) => {
 
     return data;
 };
+
 export const updateHotel = async (hotel: object) => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
     const data = await fetch(`${api}/hotel`, {
         method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(hotel),
+    }).then((data) => data.json());
+
+    return data;
+};
+
+export const deleteHotel = async (hotel: object) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    const data = await fetch(`${api}/hotel`, {
+        method: 'DELETE',
         headers: myHeaders,
         body: JSON.stringify(hotel),
     }).then((data) => data.json());

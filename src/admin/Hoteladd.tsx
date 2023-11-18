@@ -1,18 +1,37 @@
 import { useState, useEffect, FormEvent, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { getHotels, createHotel } from '../data/hotels';
+import { getHotels, createHotel, updateHotel } from '../data/hotels';
 import { Hotel } from '../interfaces/hotels';
 import Header from '../layouts/Header.tsx';
+import Rooms from '../components/Rooms.tsx';
 import uuid from 'react-uuid';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 import Login from './Login';
 import useToken from '../data/users';
 
 const Hoteladd = () => {
     const { token, setToken } = useToken();
     const { hotelId } = useParams();
-    const [hotels, sethotels] = useState<Hotel>();
+    const [hotels, sethotels] = useState<Hotel>({
+        hotelId: uuid(),
+        name: '',
+        country: '',
+        city: '',
+        isEnabled: true,
+        rooms: [
+            {
+                roomId: uuid(),
+                name: '',
+                price: 0,
+                tax: 0,
+                type: '',
+                isEnabled: true,
+                reservations: [],
+            },
+        ],
+    });
     const [amountRooms, setamountRooms] = useState(1);
     const city = useRef<any>();
 
@@ -24,12 +43,14 @@ const Hoteladd = () => {
         if (!token) {
             return;
         }
-        getHotels({ id: hotelId }).then((data) => {
-            if (data[0]) {
-                sethotels(data[0]);
-                setamountRooms(data[0].rooms.length);
-            }
-        });
+        if (hotelId) {
+            getHotels({ id: hotelId }).then((data) => {
+                if (data[0]) {
+                    sethotels(data[0]);
+                    setamountRooms(data[0].rooms.length);
+                }
+            });
+        }
     }, [hotelId, token]);
 
     if (!token) {
@@ -48,91 +69,31 @@ const Hoteladd = () => {
                 price: formData.get('room[' + index + '][price]') ?? '',
                 tax: formData.get('room[' + index + '][tax]') ?? '',
                 type: formData.get('room[' + index + '][type]') ?? '',
+                isEnabled: formData.get('room[' + index + '][disable]')
+                    ? false
+                    : true,
                 reservations: [],
             });
         }
 
-        const newData = {
-            hotelId: uuid(),
+        let newData: object = {
+            hotelId: hotels.hotelId,
             name: formData.get('name') ?? '',
             country: formData.get('country') ?? '',
             city: city.current.value.toLowerCase() ?? '',
+            isEnabled: formData.get('disable') ? false : true,
             rooms,
         };
 
-        createHotel(newData).then(() => handleShowMessage());
-    };
-
-    const renderRooms = () => {
-        const rooms = [];
-
-        for (let index = 0; index < amountRooms; index++) {
-            rooms.push(
-                <div className='border p-3' key={index}>
-                    <div className='search_group'>
-                        <label htmlFor={`room_name${index}`}>Room name</label>
-                        <input
-                            type='text'
-                            id={`room_name${index}`}
-                            name={`room[${index}][name]`}
-                            placeholder='Hotel name'
-                            value={
-                                hotels?.rooms[index] &&
-                                hotels?.rooms[index].name
-                            }
-                            required
-                        />
-                    </div>
-                    <div className='search_group'>
-                        <label htmlFor={`room_type${index}`}>Type</label>
-                        <input
-                            type='text'
-                            id={`room_type${index}`}
-                            name={`room[${index}][type]`}
-                            placeholder='Country'
-                            value={
-                                hotels?.rooms[index] &&
-                                hotels?.rooms[index].type
-                            }
-                            required
-                        />
-                    </div>
-                    <div className='search_group'>
-                        <label htmlFor={`room_price${index}`}>Price</label>
-                        <input
-                            type='number'
-                            id={`room_price${index}`}
-                            name={`room[${index}][price]`}
-                            placeholder='Price'
-                            value={
-                                hotels?.rooms[index] &&
-                                hotels?.rooms[index].price
-                            }
-                            required
-                        />
-                    </div>
-                    <div className='search_group'>
-                        <label htmlFor={`room_tax${index}`}>Tax</label>
-                        <input
-                            type='number'
-                            id={`room_tax${index}`}
-                            name={`room[${index}][tax]`}
-                            placeholder='Tax'
-                            value={
-                                hotels?.rooms[index] && hotels?.rooms[index].tax
-                            }
-                            required
-                        />
-                    </div>
-                </div>
-            );
+        if (hotelId) {
+            newData = {
+                ...newData,
+                id: hotelId,
+            };
+            updateHotel(newData).then(() => handleShowMessage());
+        } else {
+            createHotel(newData).then(() => handleShowMessage());
         }
-
-        return (
-            <div className='d-flex gap-3 flex-wrap justify-content-center mb-4'>
-                {rooms}
-            </div>
-        );
     };
 
     return (
@@ -142,7 +103,7 @@ const Hoteladd = () => {
                 <h2>Add hotel</h2>
 
                 <form onSubmit={(e) => handleSubmit(e)}>
-                    <div className='d-flex justify-content-center flex-wrap gap-3'>
+                    <div className='d-flex justify-content-center flex-wrap gap-3 mb-4'>
                         <div className='search_group'>
                             <label htmlFor='name'>Hotel name</label>
                             <input
@@ -150,7 +111,13 @@ const Hoteladd = () => {
                                 id='name'
                                 name='name'
                                 placeholder='Hotel name'
-                                value={hotels?.name}
+                                value={hotels?.name || ''}
+                                onChange={(e) =>
+                                    sethotels({
+                                        ...hotels,
+                                        name: e.target.value,
+                                    })
+                                }
                                 required
                             />
                         </div>
@@ -161,7 +128,13 @@ const Hoteladd = () => {
                                 id='country'
                                 name='country'
                                 placeholder='Country'
-                                value={hotels?.country}
+                                value={hotels?.country || ''}
+                                onChange={(e) =>
+                                    sethotels({
+                                        ...hotels,
+                                        country: e.target.value,
+                                    })
+                                }
                                 required
                             />
                         </div>
@@ -172,9 +145,31 @@ const Hoteladd = () => {
                                 id='city'
                                 name='city'
                                 placeholder='City'
+                                value={hotels?.city || ''}
                                 ref={city}
-                                value={hotels?.city}
+                                onChange={(e) =>
+                                    sethotels({
+                                        ...hotels,
+                                        city: e.target.value,
+                                    })
+                                }
                                 required
+                            />
+                        </div>
+
+                        <div className='border px-2 py-1 d-flex align-items-center'>
+                            <Form.Check
+                                type='switch'
+                                id={`disable`}
+                                label='Disable this hotel'
+                                name={`disable`}
+                                checked={!hotels?.isEnabled}
+                                onChange={() =>
+                                    sethotels({
+                                        ...hotels,
+                                        isEnabled: !hotels?.isEnabled,
+                                    })
+                                }
                             />
                         </div>
                     </div>
@@ -188,7 +183,12 @@ const Hoteladd = () => {
                         Add a room
                     </Button>
 
-                    {renderRooms()}
+                    <Rooms
+                        hotels={hotels}
+                        amountRooms={amountRooms}
+                        setamountRooms={(data: any) => setamountRooms(data)}
+                        sethotels={(data: any) => sethotels(data)}
+                    />
 
                     <div className='d-flex justify-content-center'>
                         <Button type='submit' variant='primary'>

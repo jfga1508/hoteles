@@ -7,7 +7,6 @@ import Home from './pages/Home.tsx';
 import Adminpage from './admin/Adminpage.tsx';
 import Reservationspage from './admin/Reservationspage.tsx';
 import Hoteladd from './admin/Hoteladd.tsx';
-import Hoteledit from './admin/Hoteledit.tsx';
 
 const router = createBrowserRouter([
     {
@@ -28,7 +27,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/admin/hotel/:hotelId',
-        element: <Hoteledit />,
+        element: <Hoteladd />,
     },
     {
         path: '/admin/reservations/',

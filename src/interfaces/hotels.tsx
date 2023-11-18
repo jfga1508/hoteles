@@ -1,6 +1,7 @@
 export interface Hotel {
-    id: string | FormDataEntryValue;
-    hotelId: number;
+    id?: string | FormDataEntryValue;
+    isEnabled: boolean;
+    hotelId: string;
     name: string;
     country: string;
     city: string;
@@ -9,7 +10,8 @@ export interface Hotel {
 
 export interface Room {
     isValid?: boolean;
-    roomId: number;
+    isEnabled: boolean;
+    roomId: string;
     name: string;
     price: number;
     tax: number;

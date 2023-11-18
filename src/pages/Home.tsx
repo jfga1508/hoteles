@@ -123,13 +123,17 @@ function Home() {
                                         {hotel.country}, {hotel.city}
                                     </h6>
                                     <p>Starting from ${hotel.rooms[0].price}</p>
-                                    <Link
-                                        className='btn btn-primary'
-                                        to={`/hotel/${hotel.id}?from=${search.from}&to=${search.to}&persons=${search.persons}`}
-                                        relative='path'
-                                    >
-                                        Check rooms
-                                    </Link>
+                                    {hotel.isEnabled ? (
+                                        <Link
+                                            className='btn btn-primary'
+                                            to={`/hotel/${hotel.id}?from=${search.from}&to=${search.to}&persons=${search.persons}`}
+                                            relative='path'
+                                        >
+                                            Check rooms
+                                        </Link>
+                                    ) : (
+                                        'Not available'
+                                    )}
                                 </div>
                             ))}
                     </div>

@@ -43,6 +43,8 @@ const Hotelpage = () => {
         handleShow();
     }, [selectedRoom]);
 
+    if (hotel?.isEnabled === false) return;
+
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         const formData = new FormData(e!.target as HTMLFormElement);
@@ -152,15 +154,21 @@ const Hotelpage = () => {
                                     <br />
                                     <small>Taxes: ${room.tax}</small>
                                 </p>
-                                {room.isValid ? (
-                                    <Button
-                                        variant='primary'
-                                        onClick={() => setselectedRoom(room)}
-                                    >
-                                        Book now
-                                    </Button>
+                                {room.isEnabled ? (
+                                    room.isValid ? (
+                                        <Button
+                                            variant='primary'
+                                            onClick={() =>
+                                                setselectedRoom(room)
+                                            }
+                                        >
+                                            Book now
+                                        </Button>
+                                    ) : (
+                                        <div>Overbooked!</div>
+                                    )
                                 ) : (
-                                    <div>Overbooked!</div>
+                                    <div>Not available</div>
                                 )}
                             </div>
                         ))}
